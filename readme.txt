@@ -34,29 +34,29 @@ Features above the line are supported. Things below are todo.
 *) PTZ movement left, right, up, down and stop. (replay of commands)
 *) go to home
 -----------------------------
-*) Understand PTC protocol
+*) Understand PTZ commands
 *) Fine grained camera control
-*) Read current position
+*) Read current position, zoom etx
 *) Start/stop AI (I suspect the HiSilicon is doing the AI)
 *) Zoom
-*) Ability to use camera while controlling
+*) Ability to use camera while controlling 
 *) Figure out to fetch images or use alongside webcam app.
-*) 
 
 
 The current functionality is achieved based on USB traffic captured from a virtual machine with the USB 
 camera connected via passthrough. These commands are essentially just replayed.
 
-The replay of commands reveal some "fun" behaviour, as left, right, up and down does not move clean and the speed 
-is probably different. Understanding of the protocol is needed.
+The replay of commands reveal some "fun" behaviour, as left, right, up and down commands are replayed commands that probably is not lean move commands. Understanding of the protocol is needed.
 
-The communication between the device and host also includes read commands, and this protocol is also needs to be nderstood. 
+The communication between the device and host also includes read commands, and this protocol also needs to be understood. 
+
 Hopefully it would contain current settings.
 
+#The capture process
 I have used Virtualbox installed on an Ubuntu 20.04. The virtualbox machine is running Windows 10 and the 
-official utility for windows.
+official utility for windows is used.
 
-The capture process worked as follows.
+The capture process used was the following.
 
 1) Identify the device using lsusb (6e30:fef0)
 #lsusb
@@ -71,7 +71,7 @@ Bus 001 Device 005: ID 6e30:fef0 Remo Tech Co., Ltd. OBSBOT Tiny
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
 
-2) Identify the UUID of the device in this list
+2) Identify the UUID of the device in this list (6e30:fef0 -> eb48482b-cba1-4c69-b920-bb4f5a44b128)
 #VBoxManage list usbhost
 
 Host USB Devices:
@@ -89,16 +89,16 @@ Current State:      Busy
 
 3) Start a virtualbox with windows 10 and the obsbot software (note the vm name)
 
-4) enable usb monitoring on the Ubuntu machine
+4) enable usb monitoring on the Ubuntu machine (replace your username)
 #sudo modprobe usbmon
-#sudo setfacl -m u:jesper:r /dev/usbmon*
+#sudo setfacl -m u:USER_NAME:r /dev/usbmon*
 
-5) open wireshark and capture the first usbmon device
+5) open Wireshark and capture from the first usbmon device
 
-6) Passthrough the device using
+6) Passthrough the device to the virtual windows machine
 #VBoxManage controlvm Win10_obsbot usbattach eb48482b-cba1-4c69-b920-bb4f5a44b128
 
-*Notice that the VBoxManage command can take a capturefile argument. (I used this method initially, but I was unable to parse these files with the usbrply tool.)
+*Notice that the VBoxManage command can take a capturefile argument. I used this method initially, but I was unable to parse these files with the usbrply tool.
 
 7) Exercise the camera. To record commands.
 
@@ -115,24 +115,20 @@ Current State:      Busy
 11) replay.py contains the sequence of commands 
 *Notice you have to edit the camera VID and PID before running
 
-*and possible detach the driver before you can be allowed to write to the device
+*I had to detach the driver on the device to be allowed to write to the device
 
-#Possible detach driver
 if dev.kernelDriverActive(0):
     print("detaching", 0)
     dev.detachKernelDriver(0)
 
 *when running, some commands result in error. Try uncommenting and also reduce largest sleeps to speed up things
 
-*When the commands can be sent a rplay can be seen.
+*When the commands can be sent a replay can be seen.
 
-12) Commands can be lifted form this replay file to identify camera commands. 
+12) Commands can be lifted from this replay file to identify camera commands. 
 
-Finally the working commands can be used inside an alternative camera UI. 
+Finally the working commands can be lifted into another context where they can be used. 
 
 I use PyGame as i find it an easy tool for interaction and visual feedback. Beware there is no image yet.
 
 #sudo ./tiny.py
-
-
-
