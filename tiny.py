@@ -915,6 +915,6 @@ if __name__ == "__main__":
         
         #print(mybytes)
         #a = struct.unpack('<HHHH', p)
-        bytes_as_bits = ''.join(format(byte, '08b') for byte in mybytes)
+        print(''.join(format(byte, '08b') for byte in usbdev.controlRead(0xA1, 0x81 , 0x0D00, 0x0100, 8)))
+        #print(''.join(format(byte, '08b') for byte in usbdev.controlRead(0xA1, 0x81 , 0x0E00, 0x0100, 8)))
         
-        print(bytes_as_bits)
