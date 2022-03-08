@@ -1,3 +1,13 @@
+!!!IMPORTANT!!!
+
+It has come to my attention that the PTZ controls are exposed in the V4L2 interface. Some say that they have been able to control via the OBS programs.
+
+Thanx to: Thomas Canning and Eric Betts for pointing this out to me. :)
+ 
+Therefore I dont think the reverse engineering approach, used here, is "the way to go" to be able to control the camera. 
+
+!!!IMPORTANT!!!
+
 This is a research project where I have been trying to figure out how to operate the Obsbot-Tiny camera from Linux.
 
 https://www.obsbot.com/obsbot-tiny
