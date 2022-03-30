@@ -11,6 +11,7 @@ dev = usb.core.find(idVendor=0x046d, idProduct=0xc077)
 #dev = usb.core.find(idVendor=0x45e, idProduct=0x77d)
 # first endpoint
 interface = 0
+print(dev)
 endpoint = dev[0][(0,0)][0]
 # if the OS kernel already claimed the device, which is most likely true
 # thanks to http://stackoverflow.com/questions/8218683/pyusb-cannot-set-configuration
